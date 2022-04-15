@@ -2,8 +2,6 @@
 
 import logging
 import time
-from collections import namedtuple
-import signal
 from RPi import GPIO
 import paho.mqtt.client as mqtt
 import json
@@ -17,7 +15,8 @@ GPIO.setmode(GPIO.BCM)
 mqttc = mqtt.Client()
 
 
-logging.basicConfig(level=logging.DEBUG, format='[%(asctime)s] %(levelname)-8s %(message)s')
+logging.basicConfig(level=logging.DEBUG, 
+                    format='[%(asctime)s] %(levelname)-8s %(message)s')
 
 
 def get_int(arr, start, finish):
@@ -27,6 +26,7 @@ def get_int(arr, start, finish):
         spam <<= 1
         spam |= v
     return spam
+
 
 def get_sint(arr, start, finish):
     egg = arr[start:finish+1]
@@ -148,8 +148,6 @@ class Receiver(object):
         GPIO.cleanup()
 
     def process(self):
-        state = False
-        state_time = 0
         while True:
             time.sleep(0.01)
             tm = int(time.perf_counter() * 1000000)
@@ -188,4 +186,3 @@ try:
 except:
     pass
 rc.shutdown()
-

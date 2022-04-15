@@ -6,17 +6,15 @@ import logging.handlers
 from json import loads
 from json.decoder import JSONDecodeError
 from datetime import datetime, timedelta
-import time
 import gi
-from queue import Queue, Empty
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, GObject, GLib
+from gi.repository import Gtk, GLib
 
 
 logger = logging.getLogger('mylogger')
 logger.setLevel(logging.DEBUG)
-handler = logging.handlers.SysLogHandler(address = '/dev/log')
+handler = logging.handlers.SysLogHandler(address='/dev/log')
 logger.addHandler(handler)
 
 
@@ -61,7 +59,8 @@ class Status(Indicator):
 
     def draw(self, payload):
         fc = '#ffffff' if payload == '#404040' else '#000000'
-        self.set_markup("<span color='%s' background='%s'>%s</span>" % (fc, payload or COLOR_NORMAL, self.text))
+        self.set_markup("<span color='%s' background='%s'>%s</span>" % (fc, 
+                        payload or COLOR_NORMAL, self.text))
 
 
 class Sensor(Indicator):
@@ -70,13 +69,16 @@ class Sensor(Indicator):
         super().__init__()
         self.title = title
         self.color = color
-        self.set_markup("<span color='%s'>%s</span> %s" % (self.color, self.title, '___'))
+        self.set_markup("<span color='%s'>%s</span> %s" % (self.color, 
+                                                           self.title, '___'))
 
     def draw(self, payload):
         try:
             arr = loads(payload)
             temp = "%s°" % arr.get('temperature', '_')
-            self.set_markup("<span color='%s'>%s</span> %s" % (self.color, self.title, temp))
+            self.set_markup("<span color='%s'>%s</span> %s" % (self.color, 
+                                                               self.title, 
+                                                               temp))
         except JSONDecodeError:
             pass
 
@@ -96,7 +98,8 @@ class AppWindow(Gtk.Window):
 
         self.clock = Gtk.Label()
         dt = datetime.now()
-        self.clock.set_markup("<span color='#ff0000'>%s</span>" % dt.strftime('%H:%M'))
+        self.clock.set_markup("<span color='#ff0000'>%s</span>" % 
+                              dt.strftime('%H:%M'))
         vbox.pack_start(self.clock, True, True, 2)
 
         self.indicators = {
@@ -114,8 +117,6 @@ class AppWindow(Gtk.Window):
         w, h = self.get_size()
         self.move(0, 1440)
 
-        self.data_queue = Queue()
-
         self.mqttc = mqtt.Client()
         self.mqttc.connect(MQTT_IP, MQTT_PORT)
         self.mqttc.subscribe('#')
@@ -128,7 +129,8 @@ class AppWindow(Gtk.Window):
     def update_gui(self):
         dt = datetime.now()
         if dt - self.last_update > timedelta(seconds=120):
-            self.clock.set_markup("<span color='#ff0000'>%s</span>" % dt.strftime('%H:%M'))
+            self.clock.set_markup("<span color='#ff0000'>%s</span>" % 
+                                  dt.strftime('%H:%M'))
         if dt - self.last_update > timedelta(seconds=10):
             for ind in self.indicators.values():
                 if isinstance(ind, Bulb):
