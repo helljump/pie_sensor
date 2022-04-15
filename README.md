@@ -1,8 +1,8 @@
 # pie_sensor
 
-sensors.py is the app that obtains data from 433Mhz sensors like weather and alarm sensors including smoke and water leak sensors.
+sensors.py is the app that obtains data from 433Mhz weather, motion and smoke sensors.
 It works via wl433 connected to GPIO Raspeberry PI pins.
-Supported protocol is nexus. It means few Digoo sensors will work with the app.
+Supported protocol is Nexus. It means few Digoo sensors work with the app.
 
 ![Connected pins](pie-pinout.png)
 
