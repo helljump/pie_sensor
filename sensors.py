@@ -75,7 +75,7 @@ def test_nexus(timings):
     _id = get_int(acc, 0, 7)
     batt = get_int(acc, 8, 8)
     chan = get_int(acc, 10, 11) + 1
-    temp = get_sint(acc, 15, 23) / 10
+    temp = get_sint(acc, 14, 23) / 10
     hum = get_int(acc, 28, 35)
     payload = dict(
         battery=batt,
